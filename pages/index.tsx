@@ -9,7 +9,7 @@ import {
 import type { NextPage } from "next";
 import Head from "next/head";
 import SavingsSharpIcon from "@mui/icons-material/SavingsSharp";
-import { auth } from "../config/firebase";
+import { auth, db } from "../config/firebase";
 import {
   useAuthState,
   useCreateUserWithEmailAndPassword,
@@ -17,6 +17,7 @@ import {
 } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { doc, setDoc } from "firebase/firestore";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -35,6 +36,18 @@ const Home: NextPage = () => {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    async function run() {
+      if (registerUser) {
+        const docRef = doc(db, `users`, registerUser?.user.uid);
+        await setDoc(docRef, {
+          totalAmount: 0,
+        });
+      }
+    }
+    run();
+  }, [registerUser]);
 
   if (!currentUserLoading && currentUser) {
     router.push("/dashboard");
