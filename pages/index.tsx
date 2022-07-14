@@ -40,7 +40,7 @@ const Home: NextPage = () => {
     router.push("/dashboard");
   }
 
-  if (currentUserLoading || !currentUser) {
+  if (currentUserLoading) {
     return (
       <Box
         sx={() => ({
