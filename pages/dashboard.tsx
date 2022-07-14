@@ -227,8 +227,8 @@ export default function Dashboard() {
               <h2>
                 <strong>
                   $
-                  {userDocument?.data()!.totalAmount
-                    ? userDocument?.data()!.totalAmount.toFixed(2)
+                  {userDocument?.data()?.totalAmount
+                    ? userDocument?.data()?.totalAmount.toFixed(2)
                     : "0.00"}
                 </strong>
               </h2>
