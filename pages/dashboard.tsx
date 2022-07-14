@@ -33,6 +33,7 @@ import {
   increment,
   where,
   getDocs,
+  orderBy,
 } from "firebase/firestore";
 import ClearIcon from "@mui/icons-material/Clear";
 import dayjs from "dayjs";
@@ -54,11 +55,12 @@ export default function Dashboard() {
   const [filteredTransactions, setFilteredTransactions] = useState(
     dayjs().format("YYYY-MM-DD")
   );
-
   const [transactionLable, setTransactionLabel] = useState("All Transactions");
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const [date, setDate] = useState("YYYY-MM-DD");
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -416,8 +418,10 @@ export default function Dashboard() {
                     <TextField
                       onChange={(e) => {
                         setFilteredTransactions(e.target.value);
+                        setDate(e.target.value);
                       }}
                       label="Search"
+                      value={date}
                       type="date"
                       size="small"
                       InputLabelProps={{
@@ -478,6 +482,7 @@ export default function Dashboard() {
 
                         setNewTransaction(retrievedData);
                         setTransactionLabel("All Transactions");
+                        setDate("YYYY-MM-DD");
                       }}
                       variant="outlined"
                     >
