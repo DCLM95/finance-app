@@ -197,6 +197,7 @@ const Home: NextPage = () => {
           >
             Already a member ?
             <Link
+              underline="hover"
               onClick={() => {
                 router.push("/dashboard");
               }}
