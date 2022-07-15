@@ -22,15 +22,30 @@ import { doc, setDoc } from "firebase/firestore";
 
 const Home: NextPage = () => {
   const router = useRouter();
-
-  const [signInWithEmailAndPassword, signInUser, signInLoading, signInError] =
-    useSignInWithEmailAndPassword(auth);
+  const [
+    createUserWithEmailAndPassword,
+    registerUser,
+    registerLoading,
+    registerError,
+  ] = useCreateUserWithEmailAndPassword(auth);
 
   const [currentUser, currentUserLoading, currentUserError] =
     useAuthState(auth);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    async function run() {
+      if (registerUser) {
+        const docRef = doc(db, `users`, registerUser?.user.uid);
+        await setDoc(docRef, {
+          totalAmount: 0,
+        });
+      }
+    }
+    run();
+  }, [registerUser]);
 
   if (!currentUserLoading && currentUser) {
     router.push("/dashboard");
@@ -105,7 +120,7 @@ const Home: NextPage = () => {
                 fontSize: "30px",
               })}
             >
-              <em>C.A.$.H</em>
+              <em>C.A.$.H / Register</em>
             </Typography>
           </Box>
           <Box
@@ -119,7 +134,7 @@ const Home: NextPage = () => {
               margin="normal"
               required
               placeholder="Email"
-              disabled={currentUserLoading}
+              disabled={registerLoading}
               value={username}
               onChange={(e) => {
                 setUsername(e.target.value);
@@ -133,7 +148,7 @@ const Home: NextPage = () => {
               required
               type="password"
               placeholder="Password"
-              disabled={currentUserLoading}
+              disabled={registerLoading}
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
@@ -156,14 +171,14 @@ const Home: NextPage = () => {
                   sx={{ width: "min(200px)" }}
                   onClick={(e) => {
                     e.preventDefault();
-                    signInWithEmailAndPassword(username, password);
+                    createUserWithEmailAndPassword(username, password);
                   }}
                 >
-                  Sign In
+                  Register
                 </Button>
               </Box>
               <Box>
-                {signInError && <text>Error: Invalid Email or Password</text>}
+                {registerError && <text>Error: Invalid Email or Password</text>}
               </Box>
             </Box>
           </Box>
@@ -180,10 +195,10 @@ const Home: NextPage = () => {
               color: "white",
             })}
           >
-            Not a member yet?
+            Already a member ?
             <Link
               onClick={() => {
-                router.push("/register");
+                router.push("/dashboard");
               }}
               sx={() => ({
                 color: "white",
@@ -194,7 +209,7 @@ const Home: NextPage = () => {
                 cursor: "pointer",
               })}
             >
-              Register Now!
+              Login Now!
             </Link>
           </Box>
         </Box>
