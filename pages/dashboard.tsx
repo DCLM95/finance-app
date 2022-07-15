@@ -40,6 +40,7 @@ import dayjs from "dayjs";
 import SearchIcon from "@mui/icons-material/Search";
 import SearchOffIcon from "@mui/icons-material/SearchOff";
 import { teal, pink, red } from "@mui/material/colors";
+import { arrayBuffer } from "stream/consumers";
 
 export default function Dashboard() {
   // CONST
@@ -476,8 +477,8 @@ export default function Dashboard() {
 
                         retrievedData.sort(
                           (a, b) =>
-                            parseFloat(a.createdAt.toMillis()) -
-                            parseFloat(b.createdAt.toMillis())
+                            parseFloat(b.createdAt.toMillis()) -
+                            parseFloat(a.createdAt.toMillis())
                         );
 
                         setNewTransaction(retrievedData);
@@ -584,6 +585,9 @@ export default function Dashboard() {
                               <TableCell align="right">
                                 <ClearIcon
                                   onClick={async () => {
+                                    setTransactionLabel("All Transactions");
+                                    setDate("YYYY-MM-DD");
+
                                     let amount =
                                       item.transactionType === "cashIn"
                                         ? parseFloat(item.amount) * -1
